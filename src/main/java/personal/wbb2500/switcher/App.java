@@ -75,9 +75,9 @@ public class App implements ComponentListener {
         // set-up stop/start button
         ss.addActionListener((ActionEvent e) -> {
             if (run) {
-                start();
-            } else {
                 stop();
+            } else {
+                start();
             }
         });
         
@@ -143,7 +143,7 @@ public class App implements ComponentListener {
     public static void startThread() {
         thread = new Thread(new Runnable() {
             public void run() {
-                keyboardHook.addKeyListener(new GlobalKeyAdapter() {
+                GlobalKeyAdapter ga = new GlobalKeyAdapter() {
                     public void keyPressed(GlobalKeyEvent event) {
                         int keyCode = event.getVirtualKeyCode();
                         boolean isControlPressed = event.isControlPressed();
@@ -213,7 +213,9 @@ public class App implements ComponentListener {
                         robot.keyRelease(windows);
                         robot.keyRelease(other);
                     }
-                });
+                };
+
+                keyboardHook.addKeyListener(ga);
                 
                 try {
                     while (run) {
@@ -223,12 +225,14 @@ public class App implements ComponentListener {
                     
                 } finally {
                     System.out.println("Stop Running");
-                    keyboardHook.shutdownHook();
+                    keyboardHook.removeKeyListener(ga);
                 }
             }
         });
         
-        thread.start();
+        if (!thread.isAlive()) {
+            thread.start();
+        }
     }
     
     public static void updateTiles() {
@@ -261,13 +265,13 @@ public class App implements ComponentListener {
     public void componentShown(ComponentEvent e) {
         // don't need
     }
-
+    
     public void start() {
         run = true;
         ss.setText("Stop");
         startThread();
     }
-
+    
     public void stop() {
         run = false;
         ss.setText("Start");
@@ -283,6 +287,7 @@ public class App implements ComponentListener {
     
     public void close() {
         run = false;
+        keyboardHook.shutdownHook();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
     }
