@@ -57,7 +57,7 @@ public class App implements ComponentListener {
         f = new JFrame("DesktopSwitcher");
         ss = new JButton("Start");
         eb = new JButton("Exit");
-        cbp = new JCheckBox("Minimize on start");
+        cbp = new JCheckBox("Minimize and run on start of program");
         cb = new JCheckBox("Use CTRL+ALT+RIGHT/LEFT/UP/DOWN");
         info = new JLabel(
         "<html> If CTRL+ALT+RIGHT/LEFT/UP/DOWN causes the screen to rotate, you may have to turn off hotkeys in graphics options for intel. </html>");
@@ -75,12 +75,9 @@ public class App implements ComponentListener {
         // set-up stop/start button
         ss.addActionListener((ActionEvent e) -> {
             if (run) {
-                ss.setText("Start");
-                run = false;
+                start();
             } else {
-                run = true;
-                ss.setText("Stop");
-                startThread();
+                stop();
             }
         });
         
@@ -93,6 +90,7 @@ public class App implements ComponentListener {
         
         if (prefs.minimizeStart()) {
             cbp.setSelected(true);
+            start();
         } else {
             cbp.setSelected(false);
         }
@@ -262,6 +260,17 @@ public class App implements ComponentListener {
     
     public void componentShown(ComponentEvent e) {
         // don't need
+    }
+
+    public void start() {
+        run = true;
+        ss.setText("Stop");
+        startThread();
+    }
+
+    public void stop() {
+        run = false;
+        ss.setText("Start");
     }
     
     public void hide() {
