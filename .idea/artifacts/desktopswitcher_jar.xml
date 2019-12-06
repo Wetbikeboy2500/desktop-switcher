@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="desktopswitcher:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/desktopswitcher_jar</output-path>
+    <root id="archive" name="desktopswitcher.jar">
+      <element id="module-output" name="desktopswitcher" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/lc/kra/system/system-hook/3.5/system-hook-3.5.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Maven: lc.kra.system:system-hook:3.5" />
+    </root>
+  </artifact>
+</component>
